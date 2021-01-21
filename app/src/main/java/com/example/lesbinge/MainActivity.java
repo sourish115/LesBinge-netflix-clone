@@ -9,14 +9,18 @@ import android.os.Bundle;
 
 import com.example.lesbinge.adapters.SlidePageAdapter;
 import com.example.lesbinge.models.SlideModel;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<SlideModel> slideList;
     private ViewPager pagerSlider;
+    private TabLayout indicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         pagerSlider = findViewById(R.id.page_slider);
+        indicator = findViewById(R.id.indicator);
 
         slideList = new ArrayList<>();
         slideList.add(new SlideModel(R.drawable.slide1, "SHOW1"));
@@ -34,5 +39,30 @@ public class MainActivity extends AppCompatActivity {
 
         SlidePageAdapter slideAdapter = new SlidePageAdapter(this,slideList);
         pagerSlider.setAdapter(slideAdapter);
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new MainActivity.SliderTimer(),4000,6000);
+
+        indicator.setupWithViewPager(pagerSlider);
+    }
+
+
+    class SliderTimer extends TimerTask {
+
+
+        @Override
+        public void run() {
+
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (pagerSlider.getCurrentItem()<slideList.size()-1) {
+                        pagerSlider.setCurrentItem(pagerSlider.getCurrentItem()+1);
+                    }
+                    else
+                        pagerSlider.setCurrentItem(0);
+                }
+            });
+        }
     }
 }

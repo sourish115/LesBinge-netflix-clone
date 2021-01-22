@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         indicator.setupWithViewPager(pagerSlider);
 
         List<Movies> moviesList = new ArrayList<>();
-        moviesList.add(new Movies("Moana", R.drawable.moana));
-        moviesList.add(new Movies("Black P", R.drawable.blackp));
+        moviesList.add(new Movies("Moana", R.drawable.moana, R.drawable.spidercover));
+        moviesList.add(new Movies("Black P", R.drawable.blackp, R.drawable.spidercover));
         moviesList.add(new Movies("The Martian", R.drawable.themartian));
         moviesList.add(new Movies("Moana", R.drawable.moana));
 
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         Intent intent = new Intent(getApplicationContext(),MovieDetails.class);
         intent.putExtra("title", movie.getTitle());
         intent.putExtra("imgURL", movie.getThumbnail());
+        intent.putExtra("coverImg",movie.getCoverPhoto());
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
                 movieImageView,"sharedName");

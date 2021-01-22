@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.lesbinge.adapters.MovieAdapter;
 import com.example.lesbinge.adapters.MovieItemClickListener;
@@ -20,7 +24,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieItemClickListener{
 
     private List<SlideModel> slideList;
     private ViewPager pagerSlider;
@@ -52,15 +56,30 @@ public class MainActivity extends AppCompatActivity {
         indicator.setupWithViewPager(pagerSlider);
 
         List<Movies> moviesList = new ArrayList<>();
-        MovieItemClickListener listener = null;
         moviesList.add(new Movies("Moana", R.drawable.moana));
         moviesList.add(new Movies("Black P", R.drawable.blackp));
         moviesList.add(new Movies("The Martian", R.drawable.themartian));
         moviesList.add(new Movies("Moana", R.drawable.moana));
 
-        MovieAdapter movieAdapter = new MovieAdapter(this, moviesList, listener);
+        MovieAdapter movieAdapter = new MovieAdapter(this, moviesList, this);
         Movies.setAdapter(movieAdapter);
         Movies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+    }
+
+    @Override
+    public void onMovieClick(com.example.lesbinge.models.Movies movie, ImageView movieImageView) {
+
+        Intent intent = new Intent(getApplicationContext(),MovieDetails.class);
+        intent.putExtra("title", movie.getTitle());
+        intent.putExtra("imgURL", movie.getThumbnail());
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,
+                movieImageView,"sharedName");
+
+        startActivity(intent, options.toBundle());
+
+
+
     }
 
 

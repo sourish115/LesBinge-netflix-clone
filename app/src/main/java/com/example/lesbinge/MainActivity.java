@@ -78,15 +78,10 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
                 movieImageView,"sharedName");
 
         startActivity(intent, options.toBundle());
-
-
-
     }
 
 
     class SliderTimer extends TimerTask {
-
-
         @Override
         public void run() {
 

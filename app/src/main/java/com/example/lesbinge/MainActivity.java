@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     }
 
     private void initPopularMovies(){
-        MovieAdapter movieAdapter = new MovieAdapter(this,Data.getMovies(),this);
+        MovieAdapter movieAdapter = new MovieAdapter(this,Data.getPopMovies(),this);
         popularMovies.setAdapter(movieAdapter);
         popularMovies.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
     }

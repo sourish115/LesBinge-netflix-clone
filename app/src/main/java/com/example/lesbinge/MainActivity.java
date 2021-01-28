@@ -17,6 +17,7 @@ import com.example.lesbinge.adapters.MovieItemClickListener;
 import com.example.lesbinge.adapters.SlidePageAdapter;
 import com.example.lesbinge.models.Movies;
 import com.example.lesbinge.models.SlideModel;
+import com.example.lesbinge.utils.Data;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
     private List<SlideModel> slideList;
     private ViewPager pagerSlider;
     private TabLayout indicator;
-    private RecyclerView Movies;
+    private RecyclerView Movies, popularMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +40,33 @@ public class MainActivity extends AppCompatActivity implements MovieItemClickLis
         pagerSlider = findViewById(R.id.page_slider);
         indicator = findViewById(R.id.indicator);
         Movies = findViewById(R.id.Rv_movies);
+        popularMovies = findViewById(R.id.Rv_pop_movies);
 
-        slideList = new ArrayList<>();
-        slideList.add(new SlideModel(R.drawable.slide1, "SHOW1"));
-        slideList.add(new SlideModel(R.drawable.slide2, "SHOW1"));
-        slideList.add(new SlideModel(R.drawable.slide1, "SHOW1"));
-        slideList.add(new SlideModel(R.drawable.slide2, "SHOW1"));
-        slideList.add(new SlideModel(R.drawable.slide1, "SHOW1"));
+        initSlide();
+        initMoviesRv();
+        initPopularMovies();
+    }
 
+    private void initSlide() {
+        slideList = Data.getSlideList();
         SlidePageAdapter slideAdapter = new SlidePageAdapter(this,slideList);
         pagerSlider.setAdapter(slideAdapter);
 
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new MainActivity.SliderTimer(),4000,6000);
+        timer.scheduleAtFixedRate(new SliderTimer(),4000,6000);
+        indicator.setupWithViewPager(pagerSlider,true);
+    }
 
-        indicator.setupWithViewPager(pagerSlider);
-
-        List<Movies> moviesList = new ArrayList<>();
-        moviesList.add(new Movies("Moana", R.drawable.moana, R.drawable.spidercover));
-        moviesList.add(new Movies("Black P", R.drawable.blackp, R.drawable.spidercover));
-        moviesList.add(new Movies("The Martian", R.drawable.themartian));
-        moviesList.add(new Movies("Moana", R.drawable.moana));
-
-        MovieAdapter movieAdapter = new MovieAdapter(this, moviesList, this);
+    private void initMoviesRv() {
+        MovieAdapter movieAdapter = new MovieAdapter(this, Data.getMovies(), this);
         Movies.setAdapter(movieAdapter);
         Movies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+    }
+
+    private void initPopularMovies(){
+        MovieAdapter movieAdapter = new MovieAdapter(this,Data.getMovies(),this);
+        popularMovies.setAdapter(movieAdapter);
+        popularMovies.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
     }
 
     @Override
